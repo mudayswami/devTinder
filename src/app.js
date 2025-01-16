@@ -3,7 +3,12 @@ const express = require("express");
 const app = express();
 
 
-app.get('/us+er', (req, res) =>{
+app.get('/user/:userId?', (req, res) =>{
+    if(req.query){
+        console.log(req.query)
+    }
+
+    console.log(req.params)
     res.send ({firstName:"Anubhav"})
 });
 
