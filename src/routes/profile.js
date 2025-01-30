@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const User = require('../models/user');
-const {userAuth} = require("../middleware/auth");
-
+const { userAuth } = require("../middleware/auth");
+const { editValidaion } = require("../utils/validation");
 
 router.get("/user", async (req, res) => {
     try {
@@ -48,12 +48,32 @@ router.patch("/user", async (req, res) => {
 
 router.get("/profile", userAuth, async (req, res) => {
     try {
-        
+
         res.send(req.user);
     } catch (err) {
         console.log(err);
         res.status(400).send(err.message);
     }
+});
+
+router.patch("/profile/edit", userAuth, async (req, res) => {
+    try {
+        const valid = await editValidaion(req.body);
+
+        if (!valid) throw new Error("Update is not allowed");
+        
+        const user = req.user;
+        Object.keys(req.body).forEach((key) => {user[key] = req.body[key]});
+        await user.save();
+        res.json({message:`${user.firstName} , Porfile Updated`, data: user  });
+    }catch(err){
+        res.status(400).send(err.message);
+    }
+
+});
+
+router.patch("/profile/password",userAuth,async (req, res) => {
+
 });
 
 module.exports = router;
