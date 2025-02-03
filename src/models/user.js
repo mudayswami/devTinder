@@ -80,4 +80,14 @@ userSchema.methods.validatePassword = async function(pass){
     return isPasswordValid;
 }
 
+// userSchema.pre("save", async function (next){
+//     const user = this;
+
+//     const checkMail = await this.findOne({'emailId':user.emailId});
+
+//     if(checkMail){
+//         throw new Error("email already exists");
+//     }
+
+// })
 module.exports = mongoose.model("User",userSchema);

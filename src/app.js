@@ -9,15 +9,18 @@ app.use(cookieParser());
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
+const userRouter = require("./routes/user");
 
-app.use("/",authRouter);
-app.use("/",profileRouter);
-// app.use("/",requestRouter);
 
-connectDB().then(()=>{
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
+
+connectDB().then(() => {
     app.listen(7777, () => {
         console.log("Database Connected");
-        console.log("Server is successfully listening on 3000");
+        console.log("Server is successfully listening on 7777");
     });
 }).catch((err) => {
     console.error("Database cannot be connected");
