@@ -19,8 +19,10 @@ authRouter.post("/signup", async (req, res) => {
             age,
             skills
         });
-        await user.save();
-        res.send("Data saved Successfully")
+        const savedUser = await user.save();
+        const token = await savedUser.getJWT();
+            res.cookie("token", token, { expires: new Date(Date.now() + 900000)});
+            res.send(savedUser);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -40,7 +42,7 @@ authRouter.post("/login", async (req, res) => {
         if (isUserVaid) {
             const token = await user.getJWT();
             res.cookie("token", token, { expires: new Date(Date.now() + 900000)});
-            res.send("User logged in successfully");
+            res.send(user);
         } else {
             throw new Error("Password is not valid");
         }
@@ -52,7 +54,7 @@ authRouter.post("/login", async (req, res) => {
 
 });
 
-authRouter.get("/logout",async (req,res) =>{
+authRouter.post("/logout",async (req,res) =>{
     res.cookie("token",null,{expires:new Date(Date.now())});
     res.send("Logout Success!!!");
 });

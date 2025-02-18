@@ -48,7 +48,10 @@ router.patch("/user", async (req, res) => {
 
 router.get("/profile", userAuth, async (req, res) => {
     try {
-
+        console.log(req.user);
+        if(!req.user){
+            res.status(401).send("Login first");
+        }
         res.send(req.user);
     } catch (err) {
         console.log(err);
